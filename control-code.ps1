@@ -1,7 +1,7 @@
 # PowerShell script to take a screenshot and save it on the desktop
 
 $desktopPath = [Environment]::GetFolderPath('Desktop')
-$screenshotPath = "$desktopPath\sc.jpeg"
+$screenshotPath = "$desktopPath\screen.jpeg"
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
